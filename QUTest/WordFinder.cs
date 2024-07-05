@@ -9,6 +9,12 @@
 
         public WordFinder(IEnumerable<string> matrix)
         {
+            if (matrix == null || !matrix.Any())
+            {
+                return;
+                //throw new ArgumentNullException(nameof(matrix));
+            }
+
             // Initialize values
             rows = matrix.Count();
             cols = matrix.First().Length;
@@ -54,7 +60,7 @@
             // Get top 10
             return wordCount.OrderByDescending(x => x.Value)
                              .Take(10)
-                             .Select(x => x.Key);
+                             .Select(x => $"'{x.Key}' appeared {x.Value} time/s");
         }
 
         private int CountOccurrences(string word)

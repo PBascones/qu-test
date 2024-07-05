@@ -21,7 +21,7 @@
             var wordFinder = new WordFinder(matrix);
             var result = wordFinder.Find(wordstream);
 
-            Console.WriteLine(string.Join(", ", result));
+            Console.WriteLine(string.Join("\n", result));
         }
     }
 }
