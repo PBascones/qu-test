@@ -86,33 +86,22 @@
 
         private bool SearchFromPosition(int row, int col, string word)
         {
-            return SearchHorizontally(row, col, word) || SearchVertically(row, col, word);
+            return Search(row, col, word, true) || Search(row, col, word, false);
         }
 
-        private bool SearchHorizontally(int row, int col, string word)
+        private bool Search(int row, int col, string word, bool isHorizontal)
         {
-            // Validate remaining lenght to avoid unnecessary searches
-            if (col + word.Length > cols)
+            var maxIndex = (isHorizontal ? col : row) + word.Length;
+            var limit = isHorizontal ? cols : rows;
+
+            // Validate remaining length to avoid unnecessary searches
+            if (maxIndex > limit)
                 return false;
 
             for (var i = 0; i < word.Length; i++)
             {
-                if (mainMatrix[row, col + i] != word[i])
-                    return false;
-            }
-
-            return true;
-        }
-
-        private bool SearchVertically(int row, int col, string word)
-        {
-            // Validate remaining lenght to avoid unnecessary searches
-            if (row + word.Length > rows)
-                return false;
-
-            for (var i = 0; i < word.Length; i++)
-            {
-                if (mainMatrix[row + i, col] != word[i])
+                var matrixChar = isHorizontal ? mainMatrix[row, col + i] : mainMatrix[row + i, col];
+                if (matrixChar != word[i])
                     return false;
             }
 
