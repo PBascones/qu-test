@@ -18,13 +18,13 @@ namespace QUTest
 
             // Initialize values
             rows = matrix.Count();
-            if (this.rows == 0)
+            if (rows == 0)
             {
                 throw new ArgumentException(Constants.ValidationErrors.MATRIX_EMPTY, nameof(matrix));
             }
 
             cols = matrix.First().Length;
-            if (this.cols == 0)
+            if (cols == 0)
             {
                 throw new ArgumentException(Constants.ValidationErrors.MATRIX_EMPTY_ROWS, nameof(matrix));
             }
@@ -33,7 +33,7 @@ namespace QUTest
             charPositions = new Dictionary<char, List<(int, int)>>();
 
             var i = 0;
-            // Fill mainMatrix
+            // Fill mainMatrix and charPositions
             foreach (var row in matrix)
             {
                 if (row.Length != cols)
@@ -47,7 +47,8 @@ namespace QUTest
                     var letter = row[j];
                     mainMatrix[i, j] = letter;
 
-                    // We use this "charPositions" to know where that letter is located, to improve searchs
+                    // We use this "charPositions" to know where that letter is located, to improve searchs:
+                    // the idea is to know the position of each letter in the mainMatrix, so we can go straight to it when iterating wordStream
                     if (!charPositions.ContainsKey(letter))
                         charPositions[letter] = new List<(int, int)>();
 
@@ -88,16 +89,22 @@ namespace QUTest
         {
             var count = 0;
 
-            // If the first letter isn't in the mainMatrix (charPositions), then skip it
+            // If the first letter isn't in charPositions (therefore, in the mainMatrix), then skip it
             if (!charPositions.ContainsKey(word[0]))
                 return count;
 
             // Search just from the stored positions (avoiding brute force algoritm)
             foreach (var (row, col) in charPositions[word[0]])
             {
-                if (SearchFromPosition(row, col, word))
+                if (SearchFromPosition(row, col, word, true))
                 {
-                    // If found, sum 1 to the counter
+                    // If found horizontally, increment the counter
+                    count++;
+                }
+
+                if (SearchFromPosition(row, col, word, false))
+                {
+                    // If found vertically, increment the counter
                     count++;
                 }
             }
@@ -105,12 +112,7 @@ namespace QUTest
             return count;
         }
 
-        private bool SearchFromPosition(int row, int col, string word)
-        {
-            return Search(row, col, word, true) || Search(row, col, word, false);
-        }
-
-        private bool Search(int row, int col, string word, bool isHorizontal)
+        private bool SearchFromPosition(int row, int col, string word, bool isHorizontal)
         {
             var maxIndex = (isHorizontal ? col : row) + word.Length;
             var limit = isHorizontal ? cols : rows;
