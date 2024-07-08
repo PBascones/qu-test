@@ -78,7 +78,6 @@ namespace QUTest
                     wordCount[word] = count;
             });
 
-            // The following return harms the unit tests:
             // Get top 10
             return wordCount.OrderByDescending(x => x.Value)
                              .Take(10)

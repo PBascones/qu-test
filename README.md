@@ -30,5 +30,21 @@ To ensure the correctness and performance of the `WordFinder` class, there are s
 - Words found vertically
 - Words not found in the matrix
 - Duplicate words in the word stream
+- Find words in single character matrix
+- Null or empty cases
 
-  
+Also, there are benchmark tests using 'BenchmarkDotNet' library. These are the results:
+
+```
+
+BenchmarkDotNet v0.13.12, Windows 11 (10.0.22631.3737/23H2/2023Update/SunValley3)
+AMD Ryzen 7 5825U with Radeon Graphics, 1 CPU, 16 logical and 8 physical cores
+.NET SDK 7.0.404
+  [Host]     : .NET 7.0.14 (7.0.1423.51910), X64 RyuJIT AVX2
+  DefaultJob : .NET 7.0.14 (7.0.1423.51910), X64 RyuJIT AVX2
+
+```
+| Method                                      | Mean     | Error     | StdDev    |
+|-------------------------------------------- |---------:|----------:|----------:|
+| FindWordsBenchmark                          | 3.909 μs | 0.0771 μs | 0.2248 μs |
+| FindWordsWithSingleCharacterMatrixBenchmark | 3.644 μs | 0.0728 μs | 0.1891 μs |
